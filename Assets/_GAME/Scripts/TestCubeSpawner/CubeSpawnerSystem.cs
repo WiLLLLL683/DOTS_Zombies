@@ -10,20 +10,32 @@ public partial struct CubeSpawnerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        if (!SystemAPI.TryGetSingletonEntity<CubeSpawner>(out Entity spawnerEntity))
-            return;
+        EntityCommandBuffer buffer = new(Allocator.Temp, PlaybackPolicy.MultiPlayback);
 
-        RefRW<CubeSpawner> spawner = SystemAPI.GetComponentRW<CubeSpawner>(spawnerEntity);
-        EntityCommandBuffer buffer = new(Allocator.Temp);
-
-        if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
+        foreach(var spawner in SystemAPI.Query<RefRW<CubeSpawner>>())
         {
-            Entity newEntity = buffer.Instantiate(spawner.ValueRO.prefab);
-            float3 moveDirection = Random.CreateFromIndex((uint)(SystemAPI.Time.ElapsedTime / SystemAPI.Time.DeltaTime)).NextFloat3();
-            buffer.AddComponent(newEntity, new Cube { moveDirection = moveDirection, moveSpeed = 10 });
+            if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
+            {
+                //создать новую entity
+                Entity entity = buffer.Instantiate(spawner.ValueRO.prefab);
 
-            spawner.ValueRW.nextSpawnTime = (float)SystemAPI.Time.ElapsedTime + spawner.ValueRO.spawnRate;
-            buffer.Playback(state.EntityManager);
+                //задать направление движения в новом компоненте Cube
+                float3 moveDirection = Random.CreateFromIndex((uint)(SystemAPI.Time.ElapsedTime / SystemAPI.Time.DeltaTime)).NextFloat3();
+                buffer.AddComponent(entity, new Cube { moveDirection = moveDirection, moveSpeed = 10 });
+
+                //задать положение entity
+                buffer.SetComponent(entity, new LocalTransform
+                {
+                    Position = spawner.ValueRO.spawnPosition,
+                    Rotation = quaternion.identity,
+                    Scale = 1
+                });
+
+                //обновить таймер спавна
+                spawner.ValueRW.nextSpawnTime = (float)SystemAPI.Time.ElapsedTime + spawner.ValueRO.spawnRate;
+            }
         }
+
+        buffer.Playback(state.EntityManager);
     }
 }
