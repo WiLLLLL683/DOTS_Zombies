@@ -5,6 +5,5 @@ public struct Spawner : IComponentData
 {
     public Entity prefab;
     public float spawnRate;
-    public float3 spawnPosition;
     public float nextSpawnTime;
 }

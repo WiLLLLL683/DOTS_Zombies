@@ -12,7 +12,7 @@ public partial struct SpawnerSystem : ISystem
     {
         EntityCommandBuffer buffer = new(Allocator.Temp, PlaybackPolicy.MultiPlayback);
 
-        foreach(var spawner in SystemAPI.Query<RefRW<Spawner>>())
+        foreach(var (spawner, transform) in SystemAPI.Query<RefRW<Spawner>, RefRO<LocalToWorld>>())
         {
             if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
             {
@@ -22,7 +22,7 @@ public partial struct SpawnerSystem : ISystem
                 //задать положение entity
                 buffer.SetComponent(entity, new LocalTransform
                 {
-                    Position = spawner.ValueRO.spawnPosition,
+                    Position = transform.ValueRO.Position,
                     Rotation = quaternion.identity,
                     Scale = 1
                 });

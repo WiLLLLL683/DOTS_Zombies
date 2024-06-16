@@ -18,7 +18,6 @@ class SpawnerBaker : Baker<SpawnerAuthoring>
         AddComponent(entity, new Spawner
         {
             prefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic),
-            spawnPosition = authoring.transform.position,
             nextSpawnTime = 0f,
             spawnRate = authoring.spawnRate
         });
