@@ -14,8 +14,9 @@ class CubeBaker : Baker<CubeAuthoring>
 
         AddComponent(entity, new Cube
         {
-            isNew = true,
             moveSpeed = authoring.moveSpeed
         });
+
+        AddComponent(entity, new NewSpawn());
     }
 }

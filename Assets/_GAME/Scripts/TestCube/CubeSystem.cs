@@ -10,15 +10,9 @@ public partial struct CubeSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (localTransform, cube) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Cube>>())
+        foreach (var (localTransform, cube) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<Cube>>()
+            .WithNone<NewSpawn>())
         {
-            //инициализация новых кубов
-            if (cube.ValueRO.isNew)
-            {
-                cube.ValueRW.moveDirection = Random.CreateFromIndex((uint)(SystemAPI.Time.ElapsedTime / SystemAPI.Time.DeltaTime)).NextFloat3();
-                cube.ValueRW.isNew = false;
-            }
-
             //перемещение куба
             float3 moveDelta = cube.ValueRO.moveDirection * cube.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
             localTransform.ValueRW.Position += moveDelta;

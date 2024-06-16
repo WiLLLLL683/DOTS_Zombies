@@ -10,7 +10,7 @@ public partial struct SpawnerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        EntityCommandBuffer buffer = new(Allocator.Temp, PlaybackPolicy.MultiPlayback);
+        EntityCommandBuffer buffer = new(Allocator.Temp);
 
         foreach(var (spawner, transform) in SystemAPI.Query<RefRW<Spawner>, RefRO<LocalToWorld>>())
         {
