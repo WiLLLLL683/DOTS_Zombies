@@ -22,7 +22,7 @@ public partial struct SpawnerSystem : ISystem
                 //задать положение entity
                 buffer.SetComponent(entity, new LocalTransform
                 {
-                    Position = transform.ValueRO.Position,
+                    Position = transform.ValueRO.Position + spawner.ValueRO.offset,
                     Rotation = quaternion.identity,
                     Scale = 1
                 });
