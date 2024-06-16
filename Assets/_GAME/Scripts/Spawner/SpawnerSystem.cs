@@ -27,6 +27,9 @@ public partial struct SpawnerSystem : ISystem
                     Scale = 1
                 });
 
+                //тэг нового энтити
+                buffer.AddComponent(entity, new NewSpawn());
+
                 //обновить таймер спавна
                 spawner.ValueRW.nextSpawnTime = (float)SystemAPI.Time.ElapsedTime + spawner.ValueRO.spawnRate;
             }
