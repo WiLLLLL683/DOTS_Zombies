@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class CubeSpawnerAuthoring : MonoBehaviour
+public class SpawnerAuthoring : MonoBehaviour
 {
     public GameObject prefab;
     public float spawnRate;
 }
 
-class CubeSpawnerBaker : Baker<CubeSpawnerAuthoring>
+class SpawnerBaker : Baker<SpawnerAuthoring>
 {
-    public override void Bake(CubeSpawnerAuthoring authoring)
+    public override void Bake(SpawnerAuthoring authoring)
     {
         Entity entity = GetEntity(TransformUsageFlags.None);
 
-        AddComponent(entity, new CubeSpawner
+        AddComponent(entity, new Spawner
         {
             prefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic),
             spawnPosition = authoring.transform.position,

@@ -5,23 +5,19 @@ using Unity.Collections;
 using Unity.Transforms;
 
 [BurstCompile]
-public partial struct CubeSpawnerSystem : ISystem
+public partial struct SpawnerSystem : ISystem
 {
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer buffer = new(Allocator.Temp, PlaybackPolicy.MultiPlayback);
 
-        foreach(var spawner in SystemAPI.Query<RefRW<CubeSpawner>>())
+        foreach(var spawner in SystemAPI.Query<RefRW<Spawner>>())
         {
             if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
             {
                 //создать новую entity
                 Entity entity = buffer.Instantiate(spawner.ValueRO.prefab);
-
-                //задать направление движения в новом компоненте Cube
-                float3 moveDirection = Random.CreateFromIndex((uint)(SystemAPI.Time.ElapsedTime / SystemAPI.Time.DeltaTime)).NextFloat3();
-                buffer.AddComponent(entity, new Cube { moveDirection = moveDirection, moveSpeed = 10 });
 
                 //задать положение entity
                 buffer.SetComponent(entity, new LocalTransform

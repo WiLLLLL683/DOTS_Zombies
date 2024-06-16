@@ -1,7 +1,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct CubeSpawner : IComponentData
+public struct Spawner : IComponentData
 {
     public Entity prefab;
     public float spawnRate;
