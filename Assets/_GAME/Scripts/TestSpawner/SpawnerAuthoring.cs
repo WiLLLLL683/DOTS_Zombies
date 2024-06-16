@@ -13,7 +13,7 @@ class SpawnerBaker : Baker<SpawnerAuthoring>
 {
     public override void Bake(SpawnerAuthoring authoring)
     {
-        Entity entity = GetEntity(TransformUsageFlags.None);
+        Entity entity = GetEntity(TransformUsageFlags.Dynamic);
 
         AddComponent(entity, new Spawner
         {

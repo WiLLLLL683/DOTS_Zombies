@@ -12,7 +12,7 @@ public partial struct SpawnerSystem : ISystem
     {
         EntityCommandBuffer buffer = new(Allocator.Temp);
 
-        foreach(var (spawner, transform) in SystemAPI.Query<RefRW<Spawner>, RefRO<LocalToWorld>>())
+        foreach(var (spawner, transform) in SystemAPI.Query<RefRW<Spawner>, RefRO<LocalTransform>>())
         {
             if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
             {
