@@ -1,7 +1,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct Spawner : IComponentData
+public struct ConstantSpawner : IComponentData
 {
     public Entity prefab;
     public float3 offset;

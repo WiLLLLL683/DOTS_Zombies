@@ -5,14 +5,19 @@ using Unity.Collections;
 using Unity.Transforms;
 
 [BurstCompile]
-public partial struct SpawnerSystem : ISystem
+public partial struct ConstantSpawnerSystem : ISystem
 {
+    public void OnCreate(ref SystemState state)
+    {
+        state.RequireForUpdate<ConstantSpawner>();
+    }
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer buffer = new(Allocator.Temp);
 
-        foreach(var (spawner, transform) in SystemAPI.Query<RefRW<Spawner>, RefRO<LocalTransform>>())
+        foreach(var (spawner, transform) in SystemAPI.Query<RefRW<ConstantSpawner>, RefRO<LocalTransform>>())
         {
             if (spawner.ValueRO.nextSpawnTime < SystemAPI.Time.ElapsedTime)
             {
@@ -36,5 +41,6 @@ public partial struct SpawnerSystem : ISystem
         }
 
         buffer.Playback(state.EntityManager);
+        buffer.Dispose();
     }
 }
