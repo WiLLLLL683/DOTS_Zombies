@@ -3,8 +3,10 @@ using Unity.Mathematics;
 
 public struct InputState : IComponentData
 {
-    public float Horizontal;
-    public float Vertical;
-    public float MouseX;
-    public float MouseY;
+    public float2 Movement;
+    public bool Run;
+    public bool Jump;
+    public bool Attack;
+    public float2 PointerPosition;
+    public bool PointerClick;
 }

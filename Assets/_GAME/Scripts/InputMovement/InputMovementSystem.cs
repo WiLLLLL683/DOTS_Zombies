@@ -10,11 +10,11 @@ public partial struct InputMovementSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        ref var inputState = ref SystemAPI.GetSingletonRW<InputState>().ValueRW;
+        var inputState = SystemAPI.GetSingleton<InputState>();
 
         foreach (var (transform, movement) in SystemAPI.Query<RefRW<LocalTransform>, RefRW<InputMovement>>())
         {
-            float3 moveDelta = new(inputState.Horizontal, 0f, inputState.Vertical);
+            float3 moveDelta = new(inputState.Movement.x,0f, inputState.Movement.y);
             moveDelta = math.normalizesafe(moveDelta);
             moveDelta = moveDelta * movement.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
             transform.ValueRW.Position += moveDelta;

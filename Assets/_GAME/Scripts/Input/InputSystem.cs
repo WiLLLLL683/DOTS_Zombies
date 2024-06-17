@@ -2,17 +2,26 @@ using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
-[BurstCompile]
-public partial struct InputSystem : ISystem
+public partial class InputSystem : SystemBase
 {
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    private Controls controls;
+
+    protected override void OnCreate()
+    {
+        EntityManager.CreateSingleton<InputState>();
+        controls = new();
+        controls.Enable();
+    }
+
+    protected override void OnUpdate()
     {
         ref var inputState = ref SystemAPI.GetSingletonRW<InputState>().ValueRW;
 
-        inputState.Horizontal = Input.GetAxisRaw("Horizontal");
-        inputState.Vertical = Input.GetAxisRaw("Vertical");
-        inputState.MouseX = Input.GetAxisRaw("Mouse X");
-        inputState.MouseY = Input.GetAxisRaw("Mouse Y");
+        inputState.Movement = controls.Gameplay.Movement.ReadValue<Vector2>();
+        inputState.Run = controls.Gameplay.Run.IsPressed();
+        inputState.Jump = controls.Gameplay.Jump.IsPressed();
+        inputState.Attack = controls.Gameplay.Attack.IsPressed();
+        inputState.PointerPosition = controls.Gameplay.PointerPosition.ReadValue<Vector2>();
+        inputState.PointerClick = controls.Gameplay.PointerClick.IsPressed();
     }
 }
