@@ -5,7 +5,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-public struct RandomPosition : IComponentData
+public struct RandomPosition : IComponentData, IEnableableComponent
 {
     public uint seed;
     public float radius;

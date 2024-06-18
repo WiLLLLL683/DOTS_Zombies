@@ -19,7 +19,7 @@ public partial struct OneTimeSpawnerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        EntityCommandBuffer buffer = new(Allocator.Temp);
+        EntityCommandBuffer buffer = new EntityCommandBuffer(Allocator.Temp);
 
         foreach (var (spawner, enabled, transform) in SystemAPI.Query<OneTimeSpawner, EnabledRefRW<OneTimeSpawner>, LocalTransform>())
         {
@@ -38,21 +38,32 @@ public partial struct OneTimeSpawnerSystem : ISystem
 
         buffer.Playback(state.EntityManager);
         buffer.Dispose();
+
+        new RandomPositionJob
+        {
+            SeedOffset = seedOffset
+        }.Schedule();
     }
 
-    //[WithAll(typeof(NewSpawn))]
-    //[BurstCompile]
-    //partial struct RandomPositionJob : IJobEntity
-    //{
-    //    public uint SeedOffset;
-    //    public float Radius;
-    //    public float3 Center;
+    [WithAll(typeof(RandomPosition))]
+    [BurstCompile]
+    partial struct RandomPositionJob : IJobEntity
+    {
+        public uint SeedOffset;
+        public float Radius;
+        public float3 Center;
 
-    //    public void Execute([EntityIndexInQuery] int index, ref LocalTransform transform)
-    //    {
-    //        var random = Random.CreateFromIndex(SeedOffset + (uint)index);
-    //        float2 pointInCircle = random.NextFloat2Direction() * Radius;
-    //        transform.Position = Center + new float3(pointInCircle.x, 0, pointInCircle.y);
-    //    }
-    //}
+        public void Execute([EntityIndexInQuery] int index, ref LocalTransform transform, ref RandomPosition randomPosition, EnabledRefRW<RandomPosition> enabled)
+        {
+            Radius = randomPosition.radius;
+            Center = randomPosition.center;
+            SeedOffset = randomPosition.seed;
+
+            var random = Random.CreateFromIndex(SeedOffset + (uint)index);
+            float2 pointInCircle = random.NextFloat2(-Radius, Radius);
+            transform.Position = Center + new float3(pointInCircle.x, 0, pointInCircle.y);
+
+            enabled.ValueRW = false;
+        }
+    }
 }
