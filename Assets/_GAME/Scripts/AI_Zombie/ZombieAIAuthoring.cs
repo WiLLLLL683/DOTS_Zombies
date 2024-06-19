@@ -1,6 +1,8 @@
 using Unity.Entities;
 using UnityEngine;
 
+[RequireComponent(typeof(GroundedAuthoring))]
+[RequireComponent(typeof(TargetMovementAuthoring))]
 class ZombieAIAuthoring : MonoBehaviour
 {
     public float targetInfluenceDistance;

@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
+  minDistance: 1
 --- !u!114 &-2140068853891292683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,7 +300,7 @@ MonoBehaviour:
     m_Friction:
       m_Override: 0
       m_Value:
-        Value: 0.5
+        Value: 0.8
         CombineMode: 0
     m_Restitution:
       m_Override: 0

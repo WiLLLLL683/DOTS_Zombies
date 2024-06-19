@@ -5,6 +5,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
 [UpdateBefore(typeof(TargetMovementSystem))]
 [BurstCompile]
 public partial struct ZombieAISystem : ISystem
