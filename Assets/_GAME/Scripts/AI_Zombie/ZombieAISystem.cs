@@ -12,7 +12,7 @@ public partial struct ZombieAISystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-
+        state.RequireForUpdate<ZombieAI>();
     }
 
     [BurstCompile]
@@ -24,12 +24,22 @@ public partial struct ZombieAISystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (transform, groundedEnabled, movementEnabled) in SystemAPI
-            .Query<RefRW<LocalTransform>, EnabledRefRW<Grounded>, EnabledRefRW<TargetMovement>>()
+        foreach (var (transform, zombie, groundedEnabled, movementEnabled) in SystemAPI
+            .Query<LocalTransform, ZombieAI, EnabledRefRO<Grounded>, EnabledRefRW<TargetMovement>>()
             .WithAll<ZombieAI>()
             .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
         {
-            movementEnabled.ValueRW = groundedEnabled.ValueRO;
+            //проверка на Grounded
+            bool isGrounded = groundedEnabled.ValueRO;
+
+            //проверка на нахождение в зоне влияния Target
+            Entity targetEntity = SystemAPI.GetSingletonEntity<Target>();
+            LocalTransform targetTransform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
+            float distanceToTarget = math.length(targetTransform.Position - transform.Position);
+            bool isInTargetRadius = distanceToTarget < zombie.targetInfluenceDistance;
+
+            //разрешить перемещаться
+            movementEnabled.ValueRW = isGrounded & isInTargetRadius;
         }
     }
 }
