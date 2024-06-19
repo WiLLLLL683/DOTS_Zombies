@@ -27,6 +27,8 @@ public class GroundedAuthoring : MonoBehaviour
                 groundLayer = authoring.groundLayer.Value,
                 rayCastLayer = authoring.rayCastLayer.Value
             });
+
+            SetComponentEnabled<Grounded>(entity, false);
         }
     }
 }
