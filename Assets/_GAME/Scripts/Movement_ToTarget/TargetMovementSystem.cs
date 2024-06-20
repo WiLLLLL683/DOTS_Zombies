@@ -49,12 +49,17 @@ public partial struct TargetMovementSystem : ISystem
             //дебаг
             //UGizmos.DrawLine(targetTransform.Position, transform.Position, Color.red);
 
-            //перемещение
+            //расчет направления
             float3 direction = targetTransform.Position - transform.Position;
             direction.y = 0;
             direction = math.normalize(direction);
-            float3 newVelocity = direction * movement.ValueRO.speed;
+
+            //расчет скорости
+            float speed = math.lerp(movement.ValueRO.speed, 0, distanceToTarget/target.maxDistance);
+            float3 newVelocity = direction * speed;
             newVelocity.y = velocity.Linear.y;
+
+            //перемещение
             velocity.Linear = newVelocity;
         }
     }
