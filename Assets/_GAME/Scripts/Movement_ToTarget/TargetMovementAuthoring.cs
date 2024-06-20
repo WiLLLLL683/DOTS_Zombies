@@ -5,7 +5,6 @@ using UnityEngine;
 public class TargetMovementAuthoring : MonoBehaviour
 {
     public float speed;
-    public float minDistance;
 
     class Baker : Baker<TargetMovementAuthoring>
     {
@@ -16,7 +15,6 @@ public class TargetMovementAuthoring : MonoBehaviour
             AddComponent<TargetMovement>(entity, new()
             {
                 speed = authoring.speed,
-                minDistance = authoring.minDistance
             });
         }
     }

@@ -4,5 +4,5 @@ using Unity.Physics;
 
 public struct ZombieAI : IComponentData
 {
-    public float targetInfluenceDistance;
+
 }

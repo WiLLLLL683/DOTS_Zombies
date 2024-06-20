@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 323994908918154041}
-  - component: {fileID: 3213665305659850530}
+  - component: {fileID: -483359418522014847}
   - component: {fileID: 2905877023477961656}
   - component: {fileID: -2140068853891292683}
   - component: {fileID: 1799079629430907289}
@@ -38,7 +38,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3213665305659850530
+--- !u!114 &-483359418522014847
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9617e91fe7f58e94bb5ad276a274e564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetInfluenceDistance: 10
 --- !u!114 &2905877023477961656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,8 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5b7a95853beab42a3134c58595b646, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  minDistance: 1
+  speed: 15
 --- !u!114 &-2140068853891292683
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211,7 +209,7 @@ MonoBehaviour:
   m_MotionType: 0
   m_Smoothing: 0
   m_Mass: 1
-  m_LinearDamping: 0.01
+  m_LinearDamping: 1
   m_AngularDamping: 0.05
   m_InitialLinearVelocity:
     x: 0
