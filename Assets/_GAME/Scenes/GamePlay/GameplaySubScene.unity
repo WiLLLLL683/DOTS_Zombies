@@ -130,6 +130,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1455841254164049589, guid: ced2f68ed241a1244a5ee3db6e2e2086,
+        type: 3}
+      propertyPath: maxDistance
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1709103549109637031, guid: ced2f68ed241a1244a5ee3db6e2e2086,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -500,5 +505,5 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1707320681099849638}
-  - {fileID: 1306518854}
   - {fileID: 917057307}
+  - {fileID: 1306518854}
