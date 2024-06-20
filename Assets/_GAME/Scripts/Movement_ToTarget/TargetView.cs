@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Unity.Entities;
+using Unity.Transforms;
 using UnityEngine;
 
 public class TargetView : MonoBehaviour
@@ -9,9 +11,19 @@ public class TargetView : MonoBehaviour
     private void Update()
     {
         //получить Target
+        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        var query = entityManager.CreateEntityQuery(typeof(Target));
 
-        //transform.position = TargetTransform.Position
+        if (!query.TryGetSingleton(out Target target))
+            return;
 
-        //radius.transform.localScale = Target.radiusOfInfluence
+        query.TryGetSingletonEntity<Target>(out Entity targetEntity);
+        var targetTransform = entityManager.GetComponentData<LocalTransform>(targetEntity);
+
+        //задать позицию
+        transform.position = targetTransform.Position;
+
+        //задать размер
+        radius.transform.localScale = new(target.maxDistance, target.maxDistance, target.maxDistance);
     }
 }

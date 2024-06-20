@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5259051254068826917
 Transform:
   m_ObjectHideFlags: 0
@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.16666667, y: 0.16666667, z: 0.16666667}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1709103549109637031}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.4375, g: 0.6250001, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4322521482706593398
 Transform:
   m_ObjectHideFlags: 0
@@ -177,10 +177,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1709103549109637031}
-  - component: {fileID: 1455841254164049589}
-  - component: {fileID: 7743298955533608097}
+  - component: {fileID: 2856457715662009424}
   m_Layer: 0
-  m_Name: Target
+  m_Name: TargetView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,7 +202,7 @@ Transform:
   - {fileID: 4322521482706593398}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &1455841254164049589
+--- !u!114 &2856457715662009424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -212,21 +211,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7364350764167890677}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a13b6c6b1a151494eabe7dea2ec165ad, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e1af9bd4ef11a04480e8320f50034d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 1
-  maxDistance: 10
---- !u!114 &7743298955533608097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7364350764167890677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b5fdd18d73054f40b6b54250e972127, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 25
+  radius: {fileID: 2419676194154254430}
