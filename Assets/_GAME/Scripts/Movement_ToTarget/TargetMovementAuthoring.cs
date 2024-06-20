@@ -14,7 +14,7 @@ public class TargetMovementAuthoring : MonoBehaviour
 
             AddComponent<TargetMovement>(entity, new()
             {
-                speed = authoring.speed
+                speed = authoring.speed,
             });
         }
     }
