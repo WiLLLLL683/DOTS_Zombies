@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: -483359418522014847}
   - component: {fileID: 2905877023477961656}
   - component: {fileID: -2140068853891292683}
+  - component: {fileID: -5841286670140630002}
   - component: {fileID: 1799079629430907289}
   - component: {fileID: 7395147337902592884}
   - component: {fileID: 3581993277431505620}
@@ -144,6 +145,18 @@ MonoBehaviour:
     Category29: 0
     Category30: 0
     Category31: 0
+--- !u!114 &-5841286670140630002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4508447923176668199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9a2bc6a4a4b8b4eaa36a7a8e26912d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &1799079629430907289
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -294,7 +307,7 @@ MonoBehaviour:
     m_Template: {fileID: 0}
     m_CollisionResponse:
       m_Override: 0
-      m_Value: 0
+      m_Value: 1
     m_Friction:
       m_Override: 0
       m_Value:

@@ -9,11 +9,5 @@ public struct Grounded : IComponentData, IEnableableComponent
     public float maxRayLength;
     public uint groundLayer;
     public uint rayCastLayer;
-
-    //дебаг
-    public float3 start;
-    public float3 end;
-    public bool isHit;
-    public float hitDistance;
 }
 

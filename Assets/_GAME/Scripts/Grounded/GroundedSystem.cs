@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using UGizmo;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -19,8 +20,7 @@ public partial struct GroundedSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        var world = physicsWorldSingleton.CollisionWorld;
+        var world = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
 
         foreach (var (transform, enabled, groundedRW) in
             SystemAPI.Query<LocalTransform, EnabledRefRW<Grounded>, RefRW<Grounded>>()
@@ -29,7 +29,7 @@ public partial struct GroundedSystem : ISystem
             ref var grounded = ref groundedRW.ValueRW;
 
             //параметры рейкаста
-            var raycastInput = new RaycastInput
+            var input = new RaycastInput
             {
                 Start = transform.Position + grounded.offset,
                 End = transform.Position + grounded.offset + (-transform.Up() * grounded.maxRayLength),
@@ -42,14 +42,14 @@ public partial struct GroundedSystem : ISystem
             };
 
             //рейкаст
-            bool isHit = world.CastRay(raycastInput, out RaycastHit hit);
+            bool isHit = world.CastRay(input, out RaycastHit hit);
             var hitDistance = grounded.maxRayLength * hit.Fraction;
 
             //дебаг
-            grounded.start = raycastInput.Start;
-            grounded.end = raycastInput.End;
-            grounded.isHit = isHit;
-            grounded.hitDistance = hitDistance;
+            //if (isHit)
+            //    UGizmos.DrawLine(raycastInput.Start, raycastInput.End, UnityEngine.Color.green);
+            //else
+            //    UGizmos.DrawLine(raycastInput.Start, raycastInput.End, UnityEngine.Color.grey);
 
             //проверка на Grounded
             enabled.ValueRW = isHit && (hitDistance <= grounded.threshold);
