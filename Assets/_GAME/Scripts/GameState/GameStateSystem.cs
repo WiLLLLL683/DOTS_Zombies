@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using System;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -6,16 +7,19 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 
 [BurstCompile]
-public partial struct GameStateSystem : ISystem
+public partial class GameStateSystem : SystemBase
 {
+    public event Action OnWin;
+    public event Action OnLose;
+
     [BurstCompile]
-    public void OnCreate(ref SystemState state)
+    protected override void OnCreate()
     {
-        state.EntityManager.CreateSingleton<GameState>();
+        EntityManager.CreateSingleton<GameState>();
     }
 
     [BurstCompile]
-    public void OnUpdate(ref SystemState state)
+    protected override void OnUpdate()
     {
         if (!SystemAPI.TryGetSingletonRW<GameState>(out var gameState))
             return;
@@ -34,6 +38,7 @@ public partial struct GameStateSystem : ISystem
         {
             gameState.ValueRW.isLose = true;
             gameState.ValueRW.isWin = false;
+            OnLose?.Invoke();
             return;
         }
 
