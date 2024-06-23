@@ -839,8 +839,8 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: DOTS_Zombies
-  metroPackageVersion: 
+  metroPackageName: DOTSZombies
+  metroPackageVersion: 1.0.0.0
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
@@ -848,7 +848,7 @@ PlayerSettings:
   metroCertificateNotAfter: 0000000000000000
   metroApplicationDescription: DOTS_Zombies
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: DOTS_Zombies
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0

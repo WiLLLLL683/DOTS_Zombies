@@ -28,30 +28,16 @@ public partial struct DeathSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        //var world = SystemAPI.GetSingleton<PhysicsWorldSingleton>();//.CollisionWorld;
-
         deathTriggers.Update(ref state);
         deadTags.Update(ref state);
-
-        //NativeReference<int> NumTriggerEvents = new(0, Allocator.TempJob);
 
         var job = new DeathTriggerJob
         {
             deathTriggers = deathTriggers,
             deadTags = deadTags,
-            //NumTriggerEvents = NumTriggerEvents
         };
 
         state.Dependency = job.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
-        //var jobHandle = job.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
-        //jobHandle.Complete();
-
-        //foreach (var deathTrigger in SystemAPI.Query<RefRW<DeathTrigger>>())
-        //{
-        //    deathTrigger.ValueRW.triggerEvents = NumTriggerEvents.Value;
-        //}
-
-        //NumTriggerEvents.Dispose();
     }
 
     [BurstCompile]
@@ -59,7 +45,6 @@ public partial struct DeathSystem : ISystem
     {
         [ReadOnly] public ComponentLookup<DeathTrigger> deathTriggers;
         public ComponentLookup<Dead> deadTags;
-        //public NativeReference<int> NumTriggerEvents;
 
         public void Execute(TriggerEvent triggerEvent)
         {

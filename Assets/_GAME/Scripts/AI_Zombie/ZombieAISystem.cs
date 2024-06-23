@@ -5,6 +5,9 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateAfter(typeof(DeathSystem))]
+[UpdateAfter(typeof(GroundedSystem))]
 [BurstCompile]
 public partial struct ZombieAISystem : ISystem
 {
@@ -17,13 +20,18 @@ public partial struct ZombieAISystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (transform, zombie, groundedEnabled, movementEnabled) in SystemAPI
-            .Query<LocalTransform, ZombieAI, EnabledRefRO<Grounded>, EnabledRefRW<TargetMovement>>()
-            .WithAll<ZombieAI>()
+        foreach (var (transform, zombie, mass, deadE, groundedE, movementE) in SystemAPI
+            .Query<LocalTransform, ZombieAI, RefRW<PhysicsMass>, EnabledRefRO<Dead>, EnabledRefRO<Grounded>, EnabledRefRW<TargetMovement>>()
             .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
         {
-            //разрешить перемещаться только по земле 
-            movementEnabled.ValueRW = groundedEnabled.ValueRO;
+            //разрешить перемещаться только по земле и живым
+            movementE.ValueRW = groundedE.ValueRO && !deadE.ValueRO;
+
+            //действия при смерти
+            if (deadE.ValueRO)
+            {
+                mass.ValueRW.InverseInertia = new(1f, 1f, 1f);
+            }
         }
     }
 }
