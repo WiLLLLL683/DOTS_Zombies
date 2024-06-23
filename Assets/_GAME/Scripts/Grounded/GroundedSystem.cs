@@ -1,5 +1,5 @@
-﻿using UGizmo;
-using Unity.Burst;
+﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -22,12 +22,20 @@ public partial struct GroundedSystem : ISystem
     {
         var world = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
 
-        foreach (var (transform, enabled, groundedRW) in
-            SystemAPI.Query<LocalTransform, EnabledRefRW<Grounded>, RefRW<Grounded>>()
-            .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
+        state.Dependency = new GroundedJob
         {
-            ref var grounded = ref groundedRW.ValueRW;
+            world = world
+        }.ScheduleParallel(state.Dependency);
+    }
 
+    [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
+    [BurstCompile]
+    partial struct GroundedJob : IJobEntity
+    {
+        [ReadOnly] public CollisionWorld world;
+
+        public void Execute(ref LocalTransform transform, ref Grounded grounded, EnabledRefRW<Grounded> enabled)
+        {
             //параметры рейкаста
             var input = new RaycastInput
             {
@@ -44,12 +52,6 @@ public partial struct GroundedSystem : ISystem
             //рейкаст
             bool isHit = world.CastRay(input, out RaycastHit hit);
             var hitDistance = grounded.maxRayLength * hit.Fraction;
-
-            //дебаг
-            //if (isHit)
-            //    UGizmos.DrawLine(raycastInput.Start, raycastInput.End, UnityEngine.Color.green);
-            //else
-            //    UGizmos.DrawLine(raycastInput.Start, raycastInput.End, UnityEngine.Color.grey);
 
             //проверка на Grounded
             enabled.ValueRW = isHit && (hitDistance <= grounded.threshold);
