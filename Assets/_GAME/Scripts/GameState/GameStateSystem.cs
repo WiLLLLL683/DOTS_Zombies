@@ -17,12 +17,26 @@ public partial struct GameStateSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        //foreach (var (gameState, localToWorld) in SystemAPI
-        //    .Query<RefRW<GameState>, RefRW<LocalToWorld>>())
-        //{
+        if (!SystemAPI.TryGetSingletonRW<GameState>(out var gameState))
+            return;
 
-        //}
+        //подсчет живых зомби
+        gameState.ValueRW.zombiesCount = 0;
+        foreach (var zombie in SystemAPI
+            .Query<ZombieAI>()
+            .WithNone<Dead>())
+        {
+            gameState.ValueRW.zombiesCount++;
+        }
 
+        //проверка проигрыша
+        if (gameState.ValueRO.zombiesCount <= 0)
+        {
+            gameState.ValueRW.isLose = true;
+            gameState.ValueRW.isWin = false;
+            return;
+        }
 
+        //TODO проверка победы
     }
 }
