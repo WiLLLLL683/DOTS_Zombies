@@ -7,8 +7,8 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
+//[UpdateAfter(typeof(PhysicsSystemGroup))]
 [BurstCompile]
 public partial struct DeathSystem : ISystem
 {

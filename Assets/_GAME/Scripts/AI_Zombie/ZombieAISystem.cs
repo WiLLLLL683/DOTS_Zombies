@@ -6,7 +6,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
 [UpdateBefore(typeof(DeathSystem))]
 [UpdateBefore(typeof(GroundedSystem))]
 [BurstCompile]

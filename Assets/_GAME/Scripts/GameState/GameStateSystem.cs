@@ -6,6 +6,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 [BurstCompile]
 public partial class GameStateSystem : SystemBase
 {

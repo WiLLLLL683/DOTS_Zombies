@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.Rendering;
 using UnityEngine;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 [RequireMatchingQueriesForUpdate]
 public partial class ChangeMaterialOnDeathSystem : SystemBase
 {

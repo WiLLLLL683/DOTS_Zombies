@@ -6,8 +6,8 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
+//[UpdateAfter(typeof(PhysicsSystemGroup))]
 [BurstCompile]
 public partial struct GroundedSystem : ISystem
 {

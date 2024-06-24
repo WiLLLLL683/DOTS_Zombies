@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 public partial class InputSystem : SystemBase
 {
     private Controls controls;

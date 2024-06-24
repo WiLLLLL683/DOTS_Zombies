@@ -9,8 +9,8 @@ using Unity.Transforms;
 using UnityEngine;
 
 [BurstCompile]
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateBefore(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
+//[UpdateBefore(typeof(PhysicsSystemGroup))]
 public partial struct TargetMovementSystem : ISystem
 {
     [BurstCompile]
