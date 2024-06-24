@@ -14,7 +14,7 @@ public partial struct GroundedSystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Grounded>();
+        state.RequireForUpdate<IsGrounded>();
     }
 
     [BurstCompile]
@@ -34,7 +34,7 @@ public partial struct GroundedSystem : ISystem
     {
         [ReadOnly] public CollisionWorld world;
 
-        public void Execute(ref LocalTransform transform, ref Grounded grounded, EnabledRefRW<Grounded> enabled)
+        public void Execute(ref LocalTransform transform, ref IsGrounded grounded, EnabledRefRW<IsGrounded> enabled)
         {
             //параметры рейкаста
             var input = new RaycastInput

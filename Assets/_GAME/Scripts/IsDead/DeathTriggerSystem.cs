@@ -10,19 +10,19 @@ using UnityEngine;
 [UpdateInGroup(typeof(JobSystemGroup))]
 //[UpdateAfter(typeof(PhysicsSystemGroup))]
 [BurstCompile]
-public partial struct DeathSystem : ISystem
+public partial struct DeathTriggerSystem : ISystem
 {
     private ComponentLookup<DeathTrigger> deathTriggers;
-    private ComponentLookup<Dead> deadTags;
+    private ComponentLookup<IsDead> deadTags;
 
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Dead>();
+        state.RequireForUpdate<IsDead>();
         state.RequireForUpdate<DeathTrigger>();
 
         deathTriggers = state.GetComponentLookup<DeathTrigger>(true);
-        deadTags = state.GetComponentLookup<Dead>();
+        deadTags = state.GetComponentLookup<IsDead>();
     }
 
     [BurstCompile]
@@ -44,7 +44,7 @@ public partial struct DeathSystem : ISystem
     struct DeathTriggerJob : ITriggerEventsJob
     {
         [ReadOnly] public ComponentLookup<DeathTrigger> deathTriggers;
-        public ComponentLookup<Dead> deadTags;
+        public ComponentLookup<IsDead> deadTags;
 
         public void Execute(TriggerEvent triggerEvent)
         {
@@ -53,11 +53,11 @@ public partial struct DeathSystem : ISystem
 
             if (deathTriggers.HasComponent(entityA) && deadTags.HasComponent(entityB))
             {
-                deadTags.GetEnabledRefRW<Dead>(entityB).ValueRW = true;
+                deadTags.GetEnabledRefRW<IsDead>(entityB).ValueRW = true;
             }
             else if (deathTriggers.HasComponent(entityB) && deadTags.HasComponent(entityA))
             {
-                deadTags.GetEnabledRefRW<Dead>(entityA).ValueRW = true;
+                deadTags.GetEnabledRefRW<IsDead>(entityA).ValueRW = true;
             }
         }
     }

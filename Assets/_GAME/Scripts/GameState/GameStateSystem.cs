@@ -29,7 +29,7 @@ public partial class GameStateSystem : SystemBase
         gameState.ValueRW.zombiesCount = 0;
         foreach (var zombie in SystemAPI
             .Query<ZombieAI>()
-            .WithNone<Dead>())
+            .WithNone<IsDead>())
         {
             gameState.ValueRW.zombiesCount++;
         }

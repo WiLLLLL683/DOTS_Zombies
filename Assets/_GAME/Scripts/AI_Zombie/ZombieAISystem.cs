@@ -7,7 +7,7 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 
 [UpdateInGroup(typeof(JobSystemGroup))]
-[UpdateBefore(typeof(DeathSystem))]
+[UpdateBefore(typeof(DeathTriggerSystem))]
 [UpdateBefore(typeof(GroundedSystem))]
 [BurstCompile]
 public partial struct ZombieAISystem : ISystem
@@ -29,7 +29,7 @@ public partial struct ZombieAISystem : ISystem
     [BurstCompile]
     partial struct ZombieAIJob : IJobEntity
     {
-        public void Execute(ref PhysicsMass mass, EnabledRefRW<TargetMovement> movement, EnabledRefRO<Grounded> groundE, EnabledRefRO<Dead> deadE)
+        public void Execute(ref PhysicsMass mass, EnabledRefRW<TargetMovement> movement, EnabledRefRO<IsGrounded> groundE, EnabledRefRO<IsDead> deadE)
         {
             bool isGrounded = groundE.ValueRO;
             bool isDead = deadE.ValueRO;

@@ -34,7 +34,7 @@ public partial class ChangeMaterialOnDeathSystem : SystemBase
     {
         foreach (var (change, materialMeshInfo, entity) in SystemAPI
             .Query<ChangeMaterialOnDeath, RefRW<MaterialMeshInfo>>()
-            .WithAll<Dead>()
+            .WithAll<IsDead>()
             .WithEntityAccess())
         {
             materialMeshInfo.ValueRW.MaterialID = materialMapping[change.deadMaterial];

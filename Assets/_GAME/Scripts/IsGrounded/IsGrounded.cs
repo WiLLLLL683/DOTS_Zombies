@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 using Unity.Physics;
 
-public struct Grounded : IComponentData, IEnableableComponent
+public struct IsGrounded : IComponentData, IEnableableComponent
 {
     public float3 offset;
     public float threshold;
