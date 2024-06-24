@@ -5,5 +5,6 @@ public struct GameState : IComponentData
 {
     public bool isWin;
     public bool isLose;
-    public int zombiesCount;
+    public int zombiesAliveCount;
+    public int zombiesInGoalCount;
 }

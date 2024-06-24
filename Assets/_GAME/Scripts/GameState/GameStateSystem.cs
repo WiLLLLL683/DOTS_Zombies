@@ -26,16 +26,16 @@ public partial class GameStateSystem : SystemBase
             return;
 
         //подсчет живых зомби
-        gameState.ValueRW.zombiesCount = 0;
+        gameState.ValueRW.zombiesAliveCount = 0;
         foreach (var zombie in SystemAPI
             .Query<ZombieAI>()
             .WithNone<IsDead>())
         {
-            gameState.ValueRW.zombiesCount++;
+            gameState.ValueRW.zombiesAliveCount++;
         }
 
         //проверка проигрыша
-        if (gameState.ValueRO.zombiesCount <= 0)
+        if (gameState.ValueRO.zombiesAliveCount <= 0)
         {
             gameState.ValueRW.isLose = true;
             gameState.ValueRW.isWin = false;
@@ -43,6 +43,22 @@ public partial class GameStateSystem : SystemBase
             return;
         }
 
+        //подсчет зомби внутри цели
+        gameState.ValueRW.zombiesInGoalCount = 0;
+        foreach (var zombie in SystemAPI
+            .Query<ZombieAI>()
+            .WithAll<IsInGoal>())
+        {
+            gameState.ValueRW.zombiesInGoalCount++;
+        }
+
         //TODO проверка победы
+        if (gameState.ValueRO.zombiesInGoalCount == gameState.ValueRO.zombiesAliveCount)
+        {
+            gameState.ValueRW.isLose = false;
+            gameState.ValueRW.isWin = true;
+            OnWin?.Invoke();
+            return;
+        }
     }
 }
