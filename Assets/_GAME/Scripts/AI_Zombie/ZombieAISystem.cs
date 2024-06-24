@@ -12,51 +12,30 @@ using Unity.Transforms;
 [BurstCompile]
 public partial struct ZombieAISystem : ISystem
 {
-    private ComponentLookup<TargetMovement> movementLookup;
-    private ComponentLookup<Dead> deadLookup;
-    private ComponentLookup<Grounded> groundedLookup;
-
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<ZombieAI>();
-
-        movementLookup = state.GetComponentLookup<TargetMovement>();
-        deadLookup = state.GetComponentLookup<Dead>(true);
-        groundedLookup = state.GetComponentLookup<Grounded>(true);
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        movementLookup.Update(ref state);
-        deadLookup.Update(ref state);
-        groundedLookup.Update(ref state);
-
-        state.Dependency = new ZombieAIJob
-        {
-            MovementLookup = movementLookup,
-            DeadLookup = deadLookup,
-            GroundedLookup = groundedLookup
-        }.Schedule(state.Dependency);
+        state.Dependency = new ZombieAIJob().Schedule(state.Dependency);
     }
 
     [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
-    [WithAll(typeof(ZombieAI), typeof(Grounded), typeof(Dead))]
+    [WithAll(typeof(ZombieAI))]
     [BurstCompile]
     partial struct ZombieAIJob : IJobEntity
     {
-        public ComponentLookup<TargetMovement> MovementLookup;
-        [ReadOnly] public ComponentLookup<Dead> DeadLookup;
-        [ReadOnly] public ComponentLookup<Grounded> GroundedLookup;
-
-        public void Execute(ref PhysicsMass mass, Entity entity)
+        public void Execute(ref PhysicsMass mass, EnabledRefRW<TargetMovement> movement, EnabledRefRO<Grounded> groundE, EnabledRefRO<Dead> deadE)
         {
-            bool isGrounded = GroundedLookup.IsComponentEnabled(entity);
-            bool isDead = DeadLookup.IsComponentEnabled(entity);
+            bool isGrounded = groundE.ValueRO;
+            bool isDead = deadE.ValueRO;
 
             //разрешить перемещаться только по земле и живым
-            MovementLookup.SetComponentEnabled(entity, isGrounded && !isDead);
+            movement.ValueRW = !isDead && isGrounded;
 
             //действия при смерти
             if (isDead)
