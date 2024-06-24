@@ -1,5 +1,6 @@
 using UGizmo;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
@@ -22,40 +23,48 @@ public partial struct TargetMovementSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (transform, velocityRW, movement) in SystemAPI
-            .Query<LocalTransform, RefRW<PhysicsVelocity>, RefRW<TargetMovement>>())
-        {
-            ref var velocity = ref velocityRW.ValueRW;
+        var target = SystemAPI.GetSingleton<Target>();
+        var targetEntity = SystemAPI.GetSingletonEntity<Target>();
+        var targetTransform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
 
+        state.Dependency = new TargetMovementJob
+        {
+            Target = target,
+            TargetTransform = targetTransform
+        }.Schedule(state.Dependency);
+    }
+
+    [BurstCompile]
+    partial struct TargetMovementJob : IJobEntity
+    {
+        [ReadOnly] public Target Target;
+        [ReadOnly] public LocalTransform TargetTransform;
+
+        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, TargetMovement movement)
+        {
             //расчет расстояния до цели
-            var target = SystemAPI.GetSingleton<Target>();
-            var targetEntity = SystemAPI.GetSingletonEntity<Target>();
-            var targetTransform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
-            float distanceToTarget = math.length(targetTransform.Position - transform.Position);
+            float distanceToTarget = math.length(TargetTransform.Position - transform.Position);
 
             //остановить если цель достигнута
-            if (distanceToTarget <= target.minDistance)
+            if (distanceToTarget <= Target.minDistance)
             {
-                velocity.Linear = new(0f, velocity.Linear.y, 0f);
-                continue;
+                //velocity.Linear = new(0f, velocity.Linear.y, 0f);
+                return;
             }
 
             //не перемещать если вне радиуса влияния цели
-            if (distanceToTarget > target.maxDistance)
+            if (distanceToTarget > Target.maxDistance)
             {
-                continue;
+                return;
             }
 
-            //дебаг
-            //UGizmos.DrawLine(targetTransform.Position, transform.Position, Color.red);
-
             //расчет направления
-            float3 direction = targetTransform.Position - transform.Position;
+            float3 direction = TargetTransform.Position - transform.Position;
             direction.y = 0;
             direction = math.normalize(direction);
 
             //расчет скорости
-            float speed = math.lerp(movement.ValueRO.speed, 0, distanceToTarget/target.maxDistance);
+            float speed = math.lerp(movement.speed, 0, distanceToTarget / Target.maxDistance);
             float3 newVelocity = direction * speed;
             newVelocity.y = velocity.Linear.y;
 
