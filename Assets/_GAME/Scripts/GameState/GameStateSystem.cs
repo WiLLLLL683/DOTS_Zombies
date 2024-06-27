@@ -44,7 +44,7 @@ public partial class GameStateSystem : SystemBase
             goalCount++;
             requiredZombiesInGoal += goal.countRequired;
 
-            if (goal.isFull)
+            if (goal.isComplete)
             {
                 gameState.ValueRW.fullGoalCount++;
             }
