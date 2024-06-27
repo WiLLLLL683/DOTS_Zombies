@@ -48,7 +48,7 @@ public partial struct TargetMovementSystem : ISystem
             //остановить если цель достигнута
             if (distanceToTarget <= Target.minDistance)
             {
-                //velocity.Linear = new(0f, velocity.Linear.y, 0f);
+                velocity.Linear = new(0f, velocity.Linear.y, 0f);
                 return;
             }
 

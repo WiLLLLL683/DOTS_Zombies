@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 497516934}
   - component: {fileID: 497516933}
   m_Layer: 0
-  m_Name: DeathTrigger
+  m_Name: DeathTriggerBelow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1213,12 +1213,12 @@ PrefabInstance:
     - target: {fileID: 7924963535257428536, guid: 672e2401ad388fa48a459ee0281a652b,
         type: 3}
       propertyPath: spawnCount
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 7924963535257428536, guid: 672e2401ad388fa48a459ee0281a652b,
         type: 3}
       propertyPath: spawnRadius
-      value: 1
+      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

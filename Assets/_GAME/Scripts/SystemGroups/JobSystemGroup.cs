@@ -1,8 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Physics.Systems;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateBefore(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
 public partial class JobSystemGroup : ComponentSystemGroup
 {
 
