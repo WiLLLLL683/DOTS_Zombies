@@ -10,11 +10,11 @@ using UnityEngine;
 
 public class GoalSignPresenter : MonoBehaviour
 {
-    public TextSignView prefab;
+    [SerializeField] private TextSignView prefab;
 
     private EntityManager entityManager;
-    private NativeArray<GoalTrigger> goalComponents;
-    private NativeArray<LocalTransform> transformComponents;
+    private NativeArray<GoalTrigger> goals;
+    private NativeArray<LocalTransform> goalTransforms;
     private NativeArray<Entity> goalEntities;
     private List<TextSignView> views = new();
 
@@ -22,9 +22,9 @@ public class GoalSignPresenter : MonoBehaviour
     {
         GetEntities();
 
-        for (int i = 0; i < goalComponents.Length && i < transformComponents.Length; i++)
+        for (int i = 0; i < goals.Length && i < goalTransforms.Length; i++)
         {
-            float3 position = transformComponents[i].Position;
+            float3 position = goalTransforms[i].Position;
             position.y = 0;
             TextSignView view = GameObject.Instantiate(prefab, position, Quaternion.identity);
             views.Add(view);
@@ -35,12 +35,12 @@ public class GoalSignPresenter : MonoBehaviour
     {
         GetEntities();
 
-        for (int i = 0; i < views.Count && i < goalComponents.Length && i < goalEntities.Length; i++)
+        for (int i = 0; i < views.Count && i < goals.Length && i < goalEntities.Length; i++)
         {
             string name = entityManager.GetName(goalEntities[i]);
-            int count = goalComponents[i].count;
-            int countRequired = goalComponents[i].countRequired;
-            bool isComplete = goalComponents[i].isComplete;
+            int count = goals[i].count;
+            int countRequired = goals[i].countRequired;
+            bool isComplete = goals[i].isComplete;
 
             views[i].SetText($"{name}: {count}/{countRequired}");
 
@@ -67,8 +67,8 @@ public class GoalSignPresenter : MonoBehaviour
 
         //получить goals
         var goalQuery = entityManager.CreateEntityQuery(ComponentType.ReadOnly<GoalTrigger>(), ComponentType.ReadOnly<LocalTransform>());
-        goalComponents = goalQuery.ToComponentDataArray<GoalTrigger>(AllocatorManager.Temp);
+        goals = goalQuery.ToComponentDataArray<GoalTrigger>(AllocatorManager.Temp);
         goalEntities = goalQuery.ToEntityArray(AllocatorManager.Temp);
-        transformComponents = goalQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        goalTransforms = goalQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
     }
 }

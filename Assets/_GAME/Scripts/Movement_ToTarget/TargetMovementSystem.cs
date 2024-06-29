@@ -40,7 +40,7 @@ public partial struct TargetMovementSystem : ISystem
         [ReadOnly] public Target Target;
         [ReadOnly] public LocalTransform TargetTransform;
 
-        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, TargetMovement movement)
+        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref TargetMovement movement)
         {
             //расчет расстояния до цели
             float distanceToTarget = math.length(TargetTransform.Position - transform.Position);
@@ -49,12 +49,14 @@ public partial struct TargetMovementSystem : ISystem
             if (distanceToTarget <= Target.minDistance)
             {
                 velocity.Linear = new(0f, velocity.Linear.y, 0f);
+                movement.isMoving = true;
                 return;
             }
 
             //не перемещать если вне радиуса влияния цели
             if (distanceToTarget > Target.maxDistance)
             {
+                movement.isMoving = false;
                 return;
             }
 
@@ -70,6 +72,8 @@ public partial struct TargetMovementSystem : ISystem
 
             //перемещение
             velocity.Linear = newVelocity;
+
+            movement.isMoving = true;
         }
     }
 }

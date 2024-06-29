@@ -5,4 +5,5 @@ public struct Target : IComponentData
 {
     public float minDistance;
     public float maxDistance;
+    public int count;
 }
