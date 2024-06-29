@@ -64,7 +64,10 @@ public partial struct GoalTriggerSystem : ISystem
             if (isInGoal.ValueRO)
                 return;
 
+            //ничего не делать если цель заполнена
             var trigger = goalTriggers.GetRefRW(triggerEntity);
+            if (trigger.ValueRO.isComplete)
+                return;
 
             //включить тэг
             isInGoal.ValueRW = true;
