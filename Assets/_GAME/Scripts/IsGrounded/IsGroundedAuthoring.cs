@@ -5,7 +5,7 @@ using Unity.Physics;
 using Unity.Physics.Authoring;
 using UnityEngine;
 
-public class GroundedAuthoring : MonoBehaviour
+public class IsGroundedAuthoring : MonoBehaviour
 {
     public Vector3 offset;
     public float threshold;
@@ -13,13 +13,13 @@ public class GroundedAuthoring : MonoBehaviour
     public PhysicsCategoryTags groundLayer;
     public PhysicsCategoryTags rayCastLayer;
 
-    class Baker : Baker<GroundedAuthoring>
+    class Baker : Baker<IsGroundedAuthoring>
     {
-        public override void Bake(GroundedAuthoring authoring)
+        public override void Bake(IsGroundedAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-            AddComponent(entity, new Grounded
+            AddComponent(entity, new IsGrounded
             {
                 offset = authoring.offset,
                 threshold = authoring.threshold,
@@ -28,7 +28,7 @@ public class GroundedAuthoring : MonoBehaviour
                 rayCastLayer = authoring.rayCastLayer.Value
             });
 
-            SetComponentEnabled<Grounded>(entity, false);
+            SetComponentEnabled<IsGrounded>(entity, false);
         }
     }
 }

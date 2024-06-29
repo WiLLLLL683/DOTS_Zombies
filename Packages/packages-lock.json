@@ -12,12 +12,21 @@
       "hash": "cec6f3941a6bd33a8bc2453a90b86bc5280e4b9e"
     },
     "com.unity.burst": {
-      "version": "1.8.15",
-      "depth": 1,
+      "version": "1.8.16",
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.modules.jsonserialize": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.cinemachine": {
+      "version": "2.10.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },

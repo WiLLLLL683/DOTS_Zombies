@@ -5,6 +5,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 [BurstCompile]
 public partial struct OneTimeSpawnerSystem : ISystem
 {

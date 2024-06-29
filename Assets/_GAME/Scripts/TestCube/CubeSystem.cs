@@ -4,6 +4,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Transforms;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 [BurstCompile]
 public partial struct CubeSystem : ISystem
 {

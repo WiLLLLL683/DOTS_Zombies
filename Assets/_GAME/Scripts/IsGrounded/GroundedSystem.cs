@@ -1,35 +1,43 @@
 ﻿using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateAfter(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
+//[UpdateAfter(typeof(PhysicsSystemGroup))]
 [BurstCompile]
 public partial struct GroundedSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-        state.RequireForUpdate<Grounded>();
+        state.RequireForUpdate<IsGrounded>();
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        var world = physicsWorldSingleton.CollisionWorld;
+        var world = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;
 
-        foreach (var (transform, enabled, groundedRW) in
-            SystemAPI.Query<LocalTransform, EnabledRefRW<Grounded>, RefRW<Grounded>>()
-            .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
+        state.Dependency = new GroundedJob
         {
-            ref var grounded = ref groundedRW.ValueRW;
+            world = world
+        }.ScheduleParallel(state.Dependency);
+    }
 
+    [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
+    [BurstCompile]
+    partial struct GroundedJob : IJobEntity
+    {
+        [ReadOnly] public CollisionWorld world;
+
+        public void Execute(ref LocalTransform transform, ref IsGrounded grounded, EnabledRefRW<IsGrounded> enabled)
+        {
             //параметры рейкаста
-            var raycastInput = new RaycastInput
+            var input = new RaycastInput
             {
                 Start = transform.Position + grounded.offset,
                 End = transform.Position + grounded.offset + (-transform.Up() * grounded.maxRayLength),
@@ -42,14 +50,8 @@ public partial struct GroundedSystem : ISystem
             };
 
             //рейкаст
-            bool isHit = world.CastRay(raycastInput, out RaycastHit hit);
+            bool isHit = world.CastRay(input, out RaycastHit hit);
             var hitDistance = grounded.maxRayLength * hit.Fraction;
-
-            //дебаг
-            grounded.start = raycastInput.Start;
-            grounded.end = raycastInput.End;
-            grounded.isHit = isHit;
-            grounded.hitDistance = hitDistance;
 
             //проверка на Grounded
             enabled.ValueRW = isHit && (hitDistance <= grounded.threshold);

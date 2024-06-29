@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+[UpdateInGroup(typeof(MainTreadSystemGroup))]
 [BurstCompile]
 public partial struct InputMovementSystem : ISystem
 {
