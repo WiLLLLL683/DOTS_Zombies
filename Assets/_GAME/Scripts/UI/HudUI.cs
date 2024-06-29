@@ -10,6 +10,8 @@ using UnityEngine.UI;
 public class HudUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text aliveCountText;
+    [SerializeField] private TMP_Text avaliableCountText;
+    [SerializeField] private TMP_Text requiredCountText;
     [SerializeField] private TMP_Text goalPrefab;
     [SerializeField] private Transform goalsParent;
     [SerializeField] private List<TMP_Text> goalTexts = new();
@@ -35,6 +37,8 @@ public class HudUI : MonoBehaviour
         }
 
         aliveCountText.text = gameState.zombiesAliveCount.ToString();
+        avaliableCountText.text = gameState.zombiesAvailableCount.ToString();
+        requiredCountText.text = gameState.zombiesRequiredCount.ToString();
     }
 
     private void OnDestroy()
