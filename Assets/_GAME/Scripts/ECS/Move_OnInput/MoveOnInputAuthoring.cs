@@ -2,18 +2,18 @@ using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
 
-public class InputMovementAuthoring : MonoBehaviour
+public class MoveOnInputAuthoring : MonoBehaviour
 {
     public float moveSpeed;
 }
 
-class InputMovementBaker : Baker<InputMovementAuthoring>
+class InputMovementBaker : Baker<MoveOnInputAuthoring>
 {
-    public override void Bake(InputMovementAuthoring authoring)
+    public override void Bake(MoveOnInputAuthoring authoring)
     {
         var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-        AddComponent(entity, new InputMovement
+        AddComponent(entity, new MoveOnInput
         {
             moveSpeed = authoring.moveSpeed
         });

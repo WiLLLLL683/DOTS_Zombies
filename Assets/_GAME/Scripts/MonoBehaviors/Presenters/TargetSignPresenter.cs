@@ -45,9 +45,10 @@ public class TargetSignPresenter : MonoBehaviour
     {
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-        var query = entityManager.CreateEntityQuery(ComponentType.ReadOnly<Target>(), ComponentType.ReadOnly<LocalTransform>());
-        targets = query.ToComponentDataArray<Target>(AllocatorManager.Temp);
-        targetEntities = query.ToEntityArray(AllocatorManager.Temp);
+        //получить цель перемещаемую игроком
+        var query = entityManager.CreateEntityQuery(ComponentType.ReadOnly<Target>(), ComponentType.ReadOnly<LocalTransform>(), ComponentType.ReadOnly<MoveOnInput>());
+        targets = query.ToComponentDataArray<Target>(Allocator.Temp);
+        targetEntities = query.ToEntityArray(Allocator.Temp);
         targetTransforms = query.ToComponentDataArray<LocalTransform>(Allocator.Temp);
     }
 }

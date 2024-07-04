@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-public struct InputMovement : IComponentData
+public struct MoveOnInput : IComponentData
 {
     public float moveSpeed;
 }

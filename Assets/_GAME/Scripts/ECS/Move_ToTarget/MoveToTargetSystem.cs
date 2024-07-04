@@ -8,40 +8,50 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
+//[UpdateInGroup(typeof(JobSystemGroup))]
+[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
+[UpdateBefore(typeof(PhysicsSystemGroup))]
 [BurstCompile]
-[UpdateInGroup(typeof(JobSystemGroup))]
-//[UpdateBefore(typeof(PhysicsSystemGroup))]
-public partial struct TargetMovementSystem : ISystem
+public partial struct MoveToTargetSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
         state.RequireForUpdate<Target>();
-        state.RequireForUpdate<TargetMovement>();
+        state.RequireForUpdate<MoveToTarget>();
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var target = SystemAPI.GetSingleton<Target>();
-        var targetEntity = SystemAPI.GetSingletonEntity<Target>();
-        var targetTransform = SystemAPI.GetComponent<LocalTransform>(targetEntity);
-
-        state.Dependency = new TargetMovementJob
+        foreach (var (target, transform, entity) in SystemAPI
+            .Query<Target, LocalTransform>()
+            .WithEntityAccess())
         {
-            Target = target,
-            TargetTransform = targetTransform
-        }.Schedule(state.Dependency);
+            state.Dependency = new TargetMovementJob
+            {
+                Target = target,
+                TargetEntity = entity,
+                TargetTransform = transform
+            }.Schedule(state.Dependency);
+        }
     }
 
     [BurstCompile]
     partial struct TargetMovementJob : IJobEntity
     {
         [ReadOnly] public Target Target;
+        [ReadOnly] public Entity TargetEntity;
         [ReadOnly] public LocalTransform TargetTransform;
 
-        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref TargetMovement movement)
+        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref MoveToTarget movement, PhysicsCollider collider)
         {
+            //влиять только на указанные в цели слои
+            uint belongsTo = collider.Value.Value.GetCollisionFilter().BelongsTo;
+            bool isInfluensed = (belongsTo & Target.influenceTo) != 0;
+            if (!isInfluensed)
+                return;
+
             //расчет расстояния до цели
             float distanceToTarget = math.length(TargetTransform.Position - transform.Position);
 
@@ -50,6 +60,7 @@ public partial struct TargetMovementSystem : ISystem
             {
                 velocity.Linear = new(0f, velocity.Linear.y, 0f);
                 movement.isMoving = true;
+                movement.influencedBy = TargetEntity;
                 return;
             }
 
@@ -57,6 +68,7 @@ public partial struct TargetMovementSystem : ISystem
             if (distanceToTarget > Target.maxDistance)
             {
                 movement.isMoving = false;
+                movement.influencedBy = Entity.Null;
                 return;
             }
 
@@ -72,8 +84,8 @@ public partial struct TargetMovementSystem : ISystem
 
             //перемещение
             velocity.Linear = newVelocity;
-
             movement.isMoving = true;
+            movement.influencedBy = TargetEntity;
         }
     }
 }

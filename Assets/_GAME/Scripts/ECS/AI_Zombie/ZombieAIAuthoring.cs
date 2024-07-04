@@ -2,7 +2,7 @@ using Unity.Entities;
 using UnityEngine;
 
 [RequireComponent(typeof(IsGroundedAuthoring))]
-[RequireComponent(typeof(TargetMovementAuthoring))]
+[RequireComponent(typeof(MoveToTargetAuthoring))]
 class ZombieAIAuthoring : MonoBehaviour
 {
     class Baker : Baker<ZombieAIAuthoring>
