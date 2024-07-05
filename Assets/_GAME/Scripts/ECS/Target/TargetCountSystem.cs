@@ -5,26 +5,44 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using Unity.Transforms;
 
-[UpdateInGroup(typeof(MainTreadSystemGroup))]
+[UpdateInGroup(typeof(JobSystemGroup))]
+[UpdateAfter(typeof(ZombieAISystem))]
 [BurstCompile]
 public partial struct TargetCountSystem : ISystem
 {
+    public ComponentLookup<Target> targetLookup;
+
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
+    {
+        targetLookup = state.GetComponentLookup<Target>();
+    }
+
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (target, targetEntity) in SystemAPI
-            .Query<RefRW<Target>>()
-            .WithEntityAccess())
+        //сетап для подсчета затронутых сущностей
+        foreach (var target in SystemAPI.Query<RefRW<Target>>())
         {
             target.ValueRW.count = 0;
+        }
 
-            foreach (var movement in SystemAPI.Query<MoveToTarget>())
-            {
-                if (!movement.isMoving && movement.influencedBy != targetEntity)
-                    continue;
+        targetLookup.Update(ref state);
 
-                target.ValueRW.count++;
-            }
+        state.Dependency = new TargetCountJob
+        {
+            targetLookup = targetLookup
+        }.Schedule(state.Dependency);
+    }
+
+    [BurstCompile]
+    partial struct TargetCountJob : IJobEntity
+    {
+        public ComponentLookup<Target> targetLookup;
+
+        public void Execute([EntityIndexInQuery] int index, ref MoveToTarget movement)
+        {
+            targetLookup.GetRefRW(movement.targetEntity).ValueRW.count++;
         }
     }
 }

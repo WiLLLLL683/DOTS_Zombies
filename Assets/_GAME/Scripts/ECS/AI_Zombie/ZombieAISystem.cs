@@ -29,14 +29,17 @@ public partial struct ZombieAISystem : ISystem
     [BurstCompile]
     partial struct ZombieAIJob : IJobEntity
     {
-        public void Execute(ref PhysicsMass mass, EnabledRefRW<MoveToTarget> movement, EnabledRefRO<IsGrounded> groundE, EnabledRefRO<IsDead> deadE, EnabledRefRO<IsInGoal> inGoalE)
+        public void Execute(ref PhysicsMass mass, EnabledRefRW<MoveToTarget> movementE, EnabledRefRO<IsGrounded> groundedE, EnabledRefRO<IsDead> deadE, EnabledRefRO<IsInGoal> inGoalE)
         {
-            bool isGrounded = groundE.ValueRO;
+            bool isGrounded = groundedE.ValueRO;
             bool isDead = deadE.ValueRO;
             bool isInGoal = inGoalE.ValueRO;
 
-            //разрешить перемещаться только по земле и живым
-            movement.ValueRW = !isDead && !isInGoal && isGrounded;
+            //условия для запрета перемещения
+            if (isDead || isInGoal || !isGrounded)
+            {
+                movementE.ValueRW = false;
+            }
 
             //действия при смерти
             if (isDead)
