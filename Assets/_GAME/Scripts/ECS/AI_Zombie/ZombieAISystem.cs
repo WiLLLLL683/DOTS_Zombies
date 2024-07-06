@@ -35,11 +35,8 @@ public partial struct ZombieAISystem : ISystem
             bool isDead = deadE.ValueRO;
             bool isInGoal = inGoalE.ValueRO;
 
-            //условия для запрета перемещения
-            if (isDead || isInGoal || !isGrounded)
-            {
-                movementE.ValueRW = false;
-            }
+            //условия для перемещения 
+            movementE.ValueRW = (!isDead && !isInGoal && isGrounded);
 
             //действия при смерти
             if (isDead)

@@ -29,22 +29,22 @@ public partial struct MoveToTargetSystem : ISystem
     [BurstCompile]
     partial struct TargetMovementJob : IJobEntity
     {
-        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref MoveToTarget movement)
+        public void Execute(ref LocalTransform transform, ref PhysicsVelocity velocity, ref MoveToTarget movement, ref TargetInfluence influence)
         {
             //остановить если цель достигнута
-            if (movement.distanceToTarget <= movement.target.minDistance)
+            if (influence.distanceToTarget <= influence.target.minDistance)
             {
                 velocity.Linear = new(0f, velocity.Linear.y, 0f);
                 return;
             }
 
             //расчет направления
-            float3 direction = movement.targetPos - transform.Position;
+            float3 direction = influence.targetPos - transform.Position;
             direction.y = 0;
             direction = math.normalize(direction);
 
             //расчет скорости
-            float speed = math.lerp(movement.speed, 0, movement.distanceToTarget / movement.target.maxDistance);
+            float speed = math.lerp(movement.speed, 0, influence.distanceToTarget / influence.target.maxDistance);
             float3 newVelocity = direction * speed;
             newVelocity.y = velocity.Linear.y;
 

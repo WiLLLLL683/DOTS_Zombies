@@ -36,13 +36,14 @@ public partial struct TargetCountSystem : ISystem
     }
 
     [BurstCompile]
+    [WithAny(typeof(MoveToTarget))]
     partial struct TargetCountJob : IJobEntity
     {
         public ComponentLookup<Target> targetLookup;
 
-        public void Execute([EntityIndexInQuery] int index, ref MoveToTarget movement)
+        public void Execute([EntityIndexInQuery] int index, ref TargetInfluence influence)
         {
-            targetLookup.GetRefRW(movement.targetEntity).ValueRW.count++;
+            targetLookup.GetRefRW(influence.targetEntity).ValueRW.count++;
         }
     }
 }

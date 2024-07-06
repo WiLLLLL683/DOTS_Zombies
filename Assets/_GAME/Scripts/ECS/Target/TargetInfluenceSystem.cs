@@ -14,11 +14,11 @@ public partial struct TargetInfluenceSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         //отключение движения
-        foreach (var movementE in SystemAPI
-            .Query<EnabledRefRW<MoveToTarget>>()
+        foreach (var influenceE in SystemAPI
+            .Query<EnabledRefRW<TargetInfluence>>()
             .WithOptions(EntityQueryOptions.IgnoreComponentEnabledState))
         {
-            movementE.ValueRW = false;
+            influenceE.ValueRW = false;
         }
 
         //включение движения только у затронутых целью сущностей 
@@ -46,21 +46,21 @@ public partial struct TargetInfluenceSystem : ISystem
                 if (!isLayerMatch)
                     continue;
 
-                var movement = SystemAPI.GetComponentRW<MoveToTarget>(hit.Entity);
-                bool wasInfluenced = SystemAPI.IsComponentEnabled<MoveToTarget>(hit.Entity);
+                var influence = SystemAPI.GetComponentRW<TargetInfluence>(hit.Entity);
+                bool wasInfluenced = SystemAPI.IsComponentEnabled<TargetInfluence>(hit.Entity);
 
                 //влияет только ближайщая цель
-                if (wasInfluenced && movement.ValueRO.distanceToTarget <= hit.Distance)
+                if (wasInfluenced && influence.ValueRO.distanceToTarget <= hit.Distance)
                     continue;
 
-                //включение движения
-                SystemAPI.SetComponentEnabled<MoveToTarget>(hit.Entity, true);
+                //включение влияния
+                SystemAPI.SetComponentEnabled<TargetInfluence>(hit.Entity, true);
 
                 //обновление данных для движения
-                movement.ValueRW.target = target.ValueRO;
-                movement.ValueRW.targetEntity = targetEntity;
-                movement.ValueRW.targetPos = transform.Position;
-                movement.ValueRW.distanceToTarget = hit.Distance;
+                influence.ValueRW.target = target.ValueRO;
+                influence.ValueRW.targetEntity = targetEntity;
+                influence.ValueRW.targetPos = transform.Position;
+                influence.ValueRW.distanceToTarget = hit.Distance;
             }
         }
     }

@@ -16,6 +16,7 @@ public class MoveToTargetAuthoring : MonoBehaviour
             {
                 speed = authoring.speed,
             });
+            AddComponent<TargetInfluence>(entity);
         }
     }
 }
