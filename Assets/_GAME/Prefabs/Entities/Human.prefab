@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6498577542179765044}
-  - component: {fileID: 8063588968817387929}
+  - component: {fileID: -5301504241808244705}
   - component: {fileID: 1633470763497936445}
   - component: {fileID: 7449080157581760556}
   - component: {fileID: 2681585972168168194}
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8063588968817387929
+--- !u!114 &-5301504241808244705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,10 +45,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 6757157275053917783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a5b7a95853beab42a3134c58595b646, type: 3}
+  m_Script: {fileID: 11500000, guid: 089dc45a9a84c7f4bba3b21e935ca10d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -25
+  speed: 10
+  maxRadius: 10
+  minRadius: 2
+  influenceBy:
+    Category00: 0
+    Category01: 0
+    Category02: 1
+    Category03: 0
+    Category04: 0
+    Category05: 0
+    Category06: 0
+    Category07: 0
+    Category08: 0
+    Category09: 0
+    Category10: 0
+    Category11: 0
+    Category12: 0
+    Category13: 0
+    Category14: 0
+    Category15: 0
+    Category16: 0
+    Category17: 0
+    Category18: 0
+    Category19: 0
+    Category20: 0
+    Category21: 0
+    Category22: 0
+    Category23: 0
+    Category24: 0
+    Category25: 0
+    Category26: 0
+    Category27: 0
+    Category28: 0
+    Category29: 0
+    Category30: 0
+    Category31: 0
 --- !u!33 &1633470763497936445
 MeshFilter:
   m_ObjectHideFlags: 0
