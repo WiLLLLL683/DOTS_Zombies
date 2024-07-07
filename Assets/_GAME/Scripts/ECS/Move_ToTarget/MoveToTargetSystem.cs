@@ -8,8 +8,7 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using UnityEngine;
 
-[UpdateInGroup(typeof(FixedStepSimulationSystemGroup))]
-[UpdateBefore(typeof(PhysicsSystemGroup))]
+[UpdateInGroup(typeof(MyPhysicsGroup))]
 [BurstCompile]
 public partial struct MoveToTargetSystem : ISystem
 {
